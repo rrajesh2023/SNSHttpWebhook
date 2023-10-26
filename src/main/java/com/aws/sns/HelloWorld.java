@@ -14,7 +14,7 @@ import com.google.gson.GsonBuilder;
 
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.ContainerCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.ConfirmSubscriptionRequest;
@@ -39,11 +39,12 @@ public class HelloWorld {
 			SnsRequestBody snsRequestBody = gson.fromJson(requestBody, SnsRequestBody.class);
 
 			if (snsRequestBody.getType().equals("SubscriptionConfirmation")) {
-				log.info("SubscribeURL: "+snsRequestBody.getSubscribeURL());
+				log.info("SubscribeURL: " + snsRequestBody.getSubscribeURL());
 				String[] topicARN = snsRequestBody.getTopicArn().split(":");
 				String region = topicARN[3];
 
-				AwsCredentialsProvider awsCredentialsProvider = ContainerCredentialsProvider.builder().build();
+				AwsCredentialsProvider awsCredentialsProvider = WebIdentityTokenFileCredentialsProvider.builder()
+						.roleSessionName("sns-eks-demo").build();
 
 				SnsClient snsClient = SnsClient.builder().region(Region.of(region))
 						.credentialsProvider(awsCredentialsProvider).build();
