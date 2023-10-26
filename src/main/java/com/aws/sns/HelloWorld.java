@@ -39,12 +39,12 @@ public class HelloWorld {
 			SnsRequestBody snsRequestBody = gson.fromJson(requestBody, SnsRequestBody.class);
 
 			if (snsRequestBody.getType().equals("SubscriptionConfirmation")) {
-				log.info("SubscribeURL: " + snsRequestBody.getSubscribeURL());
+				//log.info("SubscribeURL: " + snsRequestBody.getSubscribeURL());
 				String[] topicARN = snsRequestBody.getTopicArn().split(":");
 				String region = topicARN[3];
 
 				AwsCredentialsProvider awsCredentialsProvider = WebIdentityTokenFileCredentialsProvider.builder()
-						.roleSessionName("sns-eks-demo").build();
+						.roleSessionName("sns-eks-demo-sts").build();
 
 				SnsClient snsClient = SnsClient.builder().region(Region.of(region))
 						.credentialsProvider(awsCredentialsProvider).build();
@@ -77,7 +77,7 @@ public class HelloWorld {
 					.topicArn(topicArn).build();
 
 			ConfirmSubscriptionResponse result = snsClient.confirmSubscription(request);
-			log.info("\n\nStatus was " + result.sdkHttpResponse().statusCode() + "\n\nSubscription Arn: \n\n"
+			log.info("\n HTTP Status: " + result.sdkHttpResponse().statusCode() + "\n Subscription Arn: "
 					+ result.subscriptionArn());
 
 		} catch (SnsException e) {
