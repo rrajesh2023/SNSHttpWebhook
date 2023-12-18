@@ -23,7 +23,7 @@ import software.amazon.awssdk.services.sns.model.SnsException;
 
 @RestController
 @Log4j2
-public class HelloWorld {
+public class SNSWebhook {
 
 	@GetMapping("/")
 	public String hello() {
@@ -39,7 +39,7 @@ public class HelloWorld {
 			SnsRequestBody snsRequestBody = gson.fromJson(requestBody, SnsRequestBody.class);
 
 			if (snsRequestBody.getType().equals("SubscriptionConfirmation")) {
-				//log.info("SubscribeURL: " + snsRequestBody.getSubscribeURL());
+				log.info("SubscribeURL: " + snsRequestBody.getSubscribeURL());
 				String[] topicARN = snsRequestBody.getTopicArn().split(":");
 				String region = topicARN[3];
 

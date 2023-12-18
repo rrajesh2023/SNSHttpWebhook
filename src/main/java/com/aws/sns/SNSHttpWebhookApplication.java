@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Webhook2Application {
+public class SNSHttpWebhookApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Webhook2Application.class, args);
+		SpringApplication.run(SNSHttpWebhookApplication.class, args);
 	}
 
 }
